@@ -14,15 +14,11 @@ export default class DayListOfMonthView {
         this._month = month;
 
         let firstDayOfMonth = DateTime.local(year, month);
-        let lastDayOfMonth = DateTime.local(year, month, firstDayOfMonth.daysInMonth!);
         let firstDayOfMonthView = firstDayOfMonth.minus({days: firstDayOfMonth.weekday - 1});
-        let lastDayOfMonthView = lastDayOfMonth.plus({days: 7 - lastDayOfMonth.weekday});
 
-        // 计算月视图中第一天和最后一天相差几天
-        this._totalDaysOfCurrentMonthView = lastDayOfMonthView.diff(firstDayOfMonthView, 'days').as('days') + 1;
-        this._totalWeeks = this._totalDaysOfCurrentMonthView / 7;
+        this._totalDaysOfCurrentMonthView = 42;
+        this._totalWeeks = 6;
 
-        // 填充 dayList
         this._dayList = [];
         for (let i = 0; i < this._totalDaysOfCurrentMonthView; i++) {
             this._dayList.push(firstDayOfMonthView.plus({days: i}));

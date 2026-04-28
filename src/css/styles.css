@@ -93,12 +93,52 @@
     width: 3em;
 }
 
+.view-content[data-type="calendar-view"] {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    border-bottom: none !important;
+    box-sizing: border-box !important;
+}
+
+.workspace-leaf[data-type="calendar-view"],
+.workspace-leaf-content[data-type="calendar-view"],
+.workspace-leaf[data-type="calendar-view"] .view-content,
+.workspace-leaf-content[data-type="calendar-view"] .view-content {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    border-bottom: none !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.view-content[data-type="calendar-view"]::-webkit-scrollbar,
+.workspace-leaf[data-type="calendar-view"]::-webkit-scrollbar,
+.workspace-leaf-content[data-type="calendar-view"]::-webkit-scrollbar {
+    display: none !important;
+}
+
+.calendar-view-container {
+    overflow: hidden;
+    max-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 .calendar-view-body {
     width: 100%;
     padding-top: 15px;
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overflow: hidden;
+    flex: 1;
 }
 
 .month-view-header {

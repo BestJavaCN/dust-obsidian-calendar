@@ -66,13 +66,13 @@ export default function CalendarViewImpl() {
 
     if (calendarViewType === CalendarViewType.MONTH) {
         const dayListOfMonthView: DayListOfMonthView = new DayListOfMonthView(selectedDate.year, selectedDate.month);
-        return <div style={style as React.CSSProperties} ref={widthRef}>
+        return <div className="calendar-view-container" style={style as React.CSSProperties} ref={widthRef}>
             <CalendarViewHeader/>
             <MonthView dayListOfMonthView={dayListOfMonthView}/>
         </div>
     }
     else {
-        return <div style={style as React.CSSProperties} ref={widthRef}>
+        return <div className="calendar-view-container" style={style as React.CSSProperties} ref={widthRef}>
             <CalendarViewHeader/>
             <YearView showYear={selectedDate.year}/>
         </div>
