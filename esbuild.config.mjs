@@ -43,7 +43,7 @@ const result = await esbuild.build({
         js: banner,
     },
     logLevel: "info",
-    minify: prod,
+    minify: false,
     sourcemap: prod ? false : "inline",
     treeShaking: true,
     plugins: [
