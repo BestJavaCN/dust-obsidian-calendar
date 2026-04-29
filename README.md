@@ -97,6 +97,29 @@ Dust Calendar 会统计笔记中的字数和待办，并将这些信息以小圆
 
 ![统计信息（待办颜色标注）](./resource/statistic_color_annotation.jpg)
 
+## 更新节假日和调休信息
+
+由于节假日和调休安排每年都会有所调整，你可以通过以下方式更新：
+
+### 方法一：更新 lunar-typescript 依赖
+
+节假日数据由 `lunar-typescript` 库提供，更新该库即可获取最新数据：
+
+```bash
+npm install lunar-typescript@latest
+npm run build
+```
+
+然后重新安装插件到 Obsidian。
+
+### 方法二：手动修改（适合无法重新构建的情况）
+
+如果你已经安装了插件，可以直接修改 Obsidian 插件目录中的 `main.js` 文件：
+
+1. 找到插件目录：`<你的 Obsidian 库>/.obsidian/plugins/dust-calendar/main.js`
+2. 搜索 `HolidayUtil.DATA`
+3. 修改字符串内容（格式为日期编码，具体格式请参考相关文档）
+
 ## 联系和反馈
 
 如果你在使用该插件过程中，遇到各种问题、或有什么好的建议，欢迎在 [GitHub issues](https://github.com/a-nano-dust/dust-obsidian-calendar/issues) 中提出。
