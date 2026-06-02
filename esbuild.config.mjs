@@ -16,11 +16,12 @@ if you want to view the source, please visit the github repository of this plugi
 
 const prod = (process.argv[2] === "production");
 
+const outDir = "E:\\ObsidianVaultBak\\.obsidian\\plugins\\dust-calendar";
 
 const result = await esbuild.build({
     bundle: true,
     entryPoints: ["src/main.ts"],
-    outdir: "dist",
+    outdir: outDir,
     jsx: "automatic",
     format: "cjs",
     target: "es2018",
@@ -49,11 +50,11 @@ const result = await esbuild.build({
     plugins: [
         copyPlugin({
             src: "src/css/styles.css",
-            dest: "dist/styles.css"
+            dest: `${outDir}/styles.css`
         }),
         copyPlugin({
             src: "manifest.json",
-            dest: "dist/manifest.json"
+            dest: `${outDir}/manifest.json`
         }),
     ]
 });

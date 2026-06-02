@@ -1,6 +1,8 @@
 import {WorkspaceLeaf} from 'obsidian';
 import DustCalendarPlugin from "../main";
 import {CalendarView, VIEW_TYPE_CALENDAR} from "../view/CalendarView";
+import {expandCustomHolidays} from "../util/util";
+import {HolidayEntry} from "../entity/HolidayEntry";
 
 
 /**
@@ -33,6 +35,40 @@ export class CalendarViewController {
 
     public setShouldDisplayHolidayInfo(shouldDisplayHolidayInfo: boolean): boolean {
         return this.plugin.database.setting.shouldDisplayHolidayInfo = shouldDisplayHolidayInfo;
+    }
+
+    public getCustomHolidayRestDays(): string {
+        const entries = this.plugin.database.setting.customHolidays;
+        if (entries && entries.length > 0) {
+            const { restDays } = expandCustomHolidays(entries);
+            return restDays.join('\n');
+        }
+        return this.plugin.database.setting.customHolidayRestDays;
+    }
+
+    public setCustomHolidayRestDays(restDays: string): void {
+        this.plugin.database.setting.customHolidayRestDays = restDays;
+    }
+
+    public getCustomHolidayWorkDays(): string {
+        const entries = this.plugin.database.setting.customHolidays;
+        if (entries && entries.length > 0) {
+            const { workDays } = expandCustomHolidays(entries);
+            return workDays.join('\n');
+        }
+        return this.plugin.database.setting.customHolidayWorkDays;
+    }
+
+    public setCustomHolidayWorkDays(workDays: string): void {
+        this.plugin.database.setting.customHolidayWorkDays = workDays;
+    }
+
+    public getCustomHolidays(): HolidayEntry[] {
+        return this.plugin.database.setting.customHolidays;
+    }
+
+    public setCustomHolidays(entries: HolidayEntry[]): void {
+        this.plugin.database.setting.customHolidays = entries;
     }
 
 

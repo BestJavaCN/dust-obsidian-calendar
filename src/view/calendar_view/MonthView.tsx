@@ -1,6 +1,5 @@
 import {MouseEvent, useContext} from "react";
 import {DateTime} from "luxon";
-import {HolidayUtil} from "lunar-typescript";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
 import SelectedItem from "../../entity/SelectedItem";
@@ -8,7 +7,7 @@ import {DayItemFooterEntity} from "../../entity/DayItemFooterEntity";
 import DayListOfMonthView from "../../entity/DayListOfMonthView";
 import {DayItemFooterType, NoteType, SelectedItemType, WeekEnum} from "../../base/enum";
 import {PluginContext} from "../context";
-import {range} from "../../util/util";
+import {range, parseCustomHolidayDates, checkCustomHoliday} from "../../util/util";
 import StatisticLabel from "./StatisticLabel";
 
 
@@ -51,11 +50,20 @@ function DayItemSuperscript({
                                 isSelected
                             }: { targetDate: DateTime, dayListOfMonthView: DayListOfMonthView, isSelected: boolean }) {
 
-    let holiday = HolidayUtil.getHoliday(targetDate.year, targetDate.month, targetDate.day);
-    if (holiday === null) {
+    const plugin = useContext(PluginContext)!;
+
+    const customRestDaysStr = plugin.calendarViewController.getCustomHolidayRestDays();
+    const customWorkDaysStr = plugin.calendarViewController.getCustomHolidayWorkDays();
+
+    const { restDays, workDays } = parseCustomHolidayDates(customRestDaysStr, customWorkDaysStr);
+    const customResult = checkCustomHoliday(targetDate.year, targetDate.month, targetDate.day, restDays, workDays);
+
+    if (customResult === null) {
         return <></>;
     }
 
+    const isRest = customResult.isRest;
+    const isWork = customResult.isWork;
 
     let style = "d-script-font";
     let text: string;
@@ -64,15 +72,10 @@ function DayItemSuperscript({
     }
 
     if (isSelected) {
-        if (holiday.isWork()) {
-            text = "班";
-        }
-        else {
-            text = "休";
-        }
+        text = isWork ? "班" : "休";
     }
     else {
-        if (holiday.isWork()) {
+        if (isWork) {
             style = style.concat(" month-view-work");
             text = "班";
         }

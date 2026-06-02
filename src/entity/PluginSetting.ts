@@ -1,9 +1,13 @@
 import {FontSizeChangeMode, QuarterNameMode, TemplatePlugin, TodoAnnotationMode} from "../base/enum";
+import {HolidayEntry} from "./HolidayEntry";
 
 export default class PluginSetting {
 
     shouldDisplayLunarInfo: boolean;                        // 是否显示农历信息
     shouldDisplayHolidayInfo: boolean;                      // 是否显示调休信息
+    customHolidayRestDays: string;                          // 自定义节假日（休息日），每行一个日期，格式 YYYY-MM-DD（旧格式，保留兼容）
+    customHolidayWorkDays: string;                          // 自定义补班日（调休上班），每行一个日期，格式 YYYY-MM-DD（旧格式，保留兼容）
+    customHolidays: HolidayEntry[];                         // 自定义节假日结构化数据（新格式，优先级更高）
 
     fontSizeChangeMode: FontSizeChangeMode;                 // 字体大小调整方式
     immutableFontSizeFactor: number;                        // 固定字体的大小
@@ -41,6 +45,9 @@ export default class PluginSetting {
 
         this.shouldDisplayLunarInfo = true;
         this.shouldDisplayHolidayInfo = true;
+        this.customHolidayRestDays = "";
+        this.customHolidayWorkDays = "";
+        this.customHolidays = [];
 
         this.fontSizeChangeMode = FontSizeChangeMode.IMMUTABLE;
         this.immutableFontSizeFactor = 1;

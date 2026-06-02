@@ -11,6 +11,7 @@ import NotePattern from "./NotePattern";
 import DotUpperLimitSelect from "./DotUpperLimitSelect";
 import TodoAnnotationModeSelect from "./TodoAnnotationModeSelect";
 import WordsPerDotInput from "./WordsPerDotInput";
+import CustomHolidaySetting from "./CustomHolidaySetting";
 
 
 export default class MainSettingTab extends PluginSettingTab {
@@ -33,6 +34,7 @@ export default class MainSettingTab extends PluginSettingTab {
     private quarterlyNoteTemplateRoot: Root | null;
     private yearlyNotePatternRoot: Root | null;
     private yearlyNoteTemplateRoot: Root | null;
+    private customHolidaySettingRoot: Root | null;
 
     constructor(plugin: DustCalendarPlugin) {
         super(plugin.app, plugin);
@@ -54,6 +56,7 @@ export default class MainSettingTab extends PluginSettingTab {
         this.quarterlyNoteTemplateRoot = null;
         this.yearlyNotePatternRoot = null;
         this.yearlyNoteTemplateRoot = null;
+        this.customHolidaySettingRoot = null;
     }
 
     display(): any {
@@ -61,6 +64,7 @@ export default class MainSettingTab extends PluginSettingTab {
         containerEl.empty();
         this.displayShouldDisplayLunarInfoToggle();
         this.displayShouldDisplayHolidayInfo();
+        this.displayCustomHolidayInfo();
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
@@ -115,6 +119,16 @@ export default class MainSettingTab extends PluginSettingTab {
                 this.plugin.calendarViewController.setShouldDisplayHolidayInfo(value);
             });
         });
+    }
+
+    private displayCustomHolidayInfo(): void {
+        const {containerEl} = this;
+        let settingComponent = new Setting(containerEl);
+        settingComponent.settingEl.style.display = "block";
+        this.customHolidaySettingRoot = createRoot(settingComponent.settingEl);
+        this.customHolidaySettingRoot.render(
+            <CustomHolidaySetting plugin={this.plugin}/>
+        );
     }
 
     private displayImmutableFontSizeSlider(): void {
