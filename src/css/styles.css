@@ -61,6 +61,33 @@
     flex-wrap: wrap;
 }
 
+.calendar-header-row-single {
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.calendar-header-row-nowrap {
+    flex-wrap: nowrap;
+}
+
+.calendar-header-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.calendar-header-center {
+    display: flex;
+    align-items: center;
+}
+
+.calendar-header-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
 .calendar-header-block, .calendar-header-block-year, .calendar-header-block-quarter, .calendar-header-block-month {
     display: flex;
     flex-direction: column;
@@ -81,6 +108,17 @@
 .calendar-header-body, .calendar-header-body-year, .calendar-header-body-quarter, .calendar-header-body-month {
     display: flex;
     align-items: center;
+}
+
+.calendar-header-body-vertical {
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.calendar-header-body-vertical .d-icon {
+    width: 0.75em;
+    height: 0.75em;
 }
 
 .calendar-header-content-year, .calendar-header-content-month {

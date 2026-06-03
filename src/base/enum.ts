@@ -72,3 +72,11 @@ export enum TemplatePlugin {
     OBSIDIAN = 1,
     TEMPLATER = 2
 }
+
+/**
+ * 日历头部排布方式
+ */
+export enum CalendarHeaderLayout {
+    DOUBLE_ROW = 1,             // 两行排布
+    SINGLE_ROW = 2              // 单行排布
+}

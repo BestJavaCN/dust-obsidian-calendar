@@ -1,4 +1,4 @@
-import {FontSizeChangeMode, QuarterNameMode, TemplatePlugin, TodoAnnotationMode} from "../base/enum";
+import {CalendarHeaderLayout, FontSizeChangeMode, QuarterNameMode, TemplatePlugin, TodoAnnotationMode} from "../base/enum";
 import {HolidayEntry} from "./HolidayEntry";
 
 export default class PluginSetting {
@@ -13,6 +13,7 @@ export default class PluginSetting {
     immutableFontSizeFactor: number;                        // 固定字体的大小
 
     quarterNameMode: QuarterNameMode;                       // 季度命名方式
+    calendarHeaderLayout: CalendarHeaderLayout;             // 日历头部排布方式
 
     wordsPerDot: number;                                    // 多少字一个点
     dotUpperLimit: number;                                  // 最多几个点
@@ -53,6 +54,7 @@ export default class PluginSetting {
         this.immutableFontSizeFactor = 1;
 
         this.quarterNameMode = QuarterNameMode.NUMBER;
+        this.calendarHeaderLayout = CalendarHeaderLayout.DOUBLE_ROW;
 
         this.wordsPerDot = 200;
         this.dotUpperLimit = 3;

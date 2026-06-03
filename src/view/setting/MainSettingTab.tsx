@@ -1,6 +1,6 @@
 import {PluginSettingTab, Setting} from "obsidian";
 import {createRoot, Root} from "react-dom/client";
-import {FontSizeChangeMode, NoteType, TemplatePlugin} from "../../base/enum";
+import {CalendarHeaderLayout, FontSizeChangeMode, NoteType, TemplatePlugin} from "../../base/enum";
 import DustCalendarPlugin from "../../main";
 import ImmutableFontSizeSlider from "./ImmutableFontSizeSlider";
 import FontSizeChangeModeSelect from "./FontSizeChangeModeSelect";
@@ -68,6 +68,7 @@ export default class MainSettingTab extends PluginSettingTab {
         this.displayFontSizeChangeModeSelect();
         this.displayImmutableFontSizeSlider();
         this.displayQuarterNameModeSelect();
+        this.displayCalendarHeaderLayoutSelect();
         this.displayWordsPerDotInput();
         this.displayDotUpperLimitSelect();
         this.displayTodoAnnotationModeSelect();
@@ -152,6 +153,20 @@ export default class MainSettingTab extends PluginSettingTab {
         this.quarterNameModeSelectRoot.render(
             <QuarterNameModeSelect plugin={this.plugin}/>
         );
+    }
+
+    private displayCalendarHeaderLayoutSelect(): void {
+        const {containerEl} = this;
+        let element = new Setting(containerEl);
+        element.setName("日历头部排布方式").setDesc("选择日历头部的排布方式：单行或两行。");
+        element.addDropdown(dropdown => {
+            dropdown.addOption(String(CalendarHeaderLayout.DOUBLE_ROW), "两行排布");
+            dropdown.addOption(String(CalendarHeaderLayout.SINGLE_ROW), "单行排布");
+            dropdown.setValue(String(this.plugin.database.setting.calendarHeaderLayout));
+            dropdown.onChange(async (value) => {
+                this.plugin.database.setting.calendarHeaderLayout = Number(value) as CalendarHeaderLayout;
+            });
+        });
     }
 
     private displayWordsPerDotInput(): void {
