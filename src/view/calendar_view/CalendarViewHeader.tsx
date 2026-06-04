@@ -221,6 +221,7 @@ export default function CalendarViewHeader() {
 function SingleRowCalendarHeader() {
 
     const [hidden, setHidden] = useState(true);
+    const [hiddenQuarter, setHiddenQuarter] = useState(true);
     const dispatch = useAppDispatch();
     const selectedItem = useAppSelector(selectSelectedItem);
     const selectedDate = selectedItem.date;
@@ -290,17 +291,17 @@ function SingleRowCalendarHeader() {
                 </div>
                 <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextYear}/>
             </div>
-            <div className="calendar-header-nav-group"
-                 onMouseEnter={() => setHidden(false)}
-                 onMouseLeave={() => setHidden(true)}>
-                <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastQuarter}/>
-                <span className="calendar-header-content-quarter"
-                      onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-                    {plugin.viewController.parseQuarterName(selectedDate.quarter)}
-                </span>
-                <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextQuarter}/>
-            </div>
-            <div className="calendar-header-nav-group calendar-header-nav-group-buttons" style={{marginRight: '8px'}}>
+            <div className="calendar-header-nav-group calendar-header-nav-group-buttons" style={{marginRight: '18px'}}>
+                <div className="calendar-header-nav-group"
+                     onMouseEnter={() => setHiddenQuarter(false)}
+                     onMouseLeave={() => setHiddenQuarter(true)}>
+                    <ChevronLeft className="d-icon" style={{visibility: hiddenQuarter ? 'hidden' : 'visible'}} onClick={toLastQuarter}/>
+                    <span className="calendar-header-content-quarter"
+                          onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+                        {plugin.viewController.parseQuarterName(selectedDate.quarter)}
+                    </span>
+                    <ChevronRight className="d-icon" style={{visibility: hiddenQuarter ? 'hidden' : 'visible'}} onClick={toNextQuarter}/>
+                </div>
                 <TodayItem/>
             </div>
         </div>
