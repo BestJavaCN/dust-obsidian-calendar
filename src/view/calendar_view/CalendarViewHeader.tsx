@@ -3,13 +3,13 @@ import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectSelectedItem, updateSelectedItem} from "../redux/selectedItemSlice";
 import {selectCalendarViewType, updateCalendarViewType} from "../redux/calendarViewType";
 import {DateTime} from "luxon";
-import {ChevronLeft, ChevronRight, ChevronUp, ChevronDown} from 'lucide-react';
+import {ChevronLeft, ChevronRight} from 'lucide-react';
 import SelectedItem from "../../entity/SelectedItem";
 import {CalendarViewType, CalendarHeaderLayout, NoteType, SelectedItemType} from "../../base/enum";
 import {PluginContext} from "../context";
 import StatisticLabel from "./StatisticLabel";
 
-function YearItem({vertical = false}: {vertical?: boolean}) {
+function YearItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
@@ -31,20 +31,6 @@ function YearItem({vertical = false}: {vertical?: boolean}) {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    if (vertical) {
-        return <div className="calendar-header-block-year">
-            <div className="calendar-header-body-year calendar-header-body-vertical" onMouseEnter={() => setHidden(false)}
-                 onMouseLeave={() => setHidden(true)}>
-                <ChevronUp className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastYear}/>
-                <div className="calendar-header-content-year"
-                     onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
-                    <div>{selectedDate.year}年</div>
-                </div>
-                <ChevronDown className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextYear}/>
-            </div>
-        </div>
-    }
-
     return <div className="calendar-header-block-year">
         <div className="calendar-header-body-year" onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
@@ -59,7 +45,7 @@ function YearItem({vertical = false}: {vertical?: boolean}) {
     </div>
 }
 
-function MonthItem({vertical = false}: {vertical?: boolean}) {
+function MonthItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
@@ -81,20 +67,6 @@ function MonthItem({vertical = false}: {vertical?: boolean}) {
         dispatch(updateSelectedItem(newSelectedItem));
     }
 
-    if (vertical) {
-        return <div className="calendar-header-block-month">
-            <div className="calendar-header-body-month calendar-header-body-vertical" onMouseEnter={() => setHidden(false)}
-                 onMouseLeave={() => setHidden(true)}>
-                <ChevronUp className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastMonth}/>
-                <div className="calendar-header-content-month"
-                     onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
-                    <div>{selectedDate.month}月</div>
-                </div>
-                <ChevronDown className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextMonth}/>
-            </div>
-        </div>
-    }
-
     return <div className="calendar-header-block-month">
         <div className="calendar-header-body-month" onMouseEnter={() => setHidden(false)}
              onMouseLeave={() => setHidden(true)}>
@@ -109,7 +81,7 @@ function MonthItem({vertical = false}: {vertical?: boolean}) {
     </div>
 }
 
-function QuarterItem({vertical = false}: {vertical?: boolean}) {
+function QuarterItem() {
 
     const [hidden, setHidden] = useState(true);
     const dispatch = useAppDispatch();
@@ -129,22 +101,6 @@ function QuarterItem({vertical = false}: {vertical?: boolean}) {
         newSelectedItem.type = selectedItem.type;
         newSelectedItem.date = selectedDate.plus({months: 3});
         dispatch(updateSelectedItem(newSelectedItem));
-    }
-
-    if (vertical) {
-        return <div className="calendar-header-block-quarter">
-            <div className="calendar-header-body-quarter calendar-header-body-vertical" onMouseEnter={() => setHidden(false)}
-                 onMouseLeave={() => setHidden(true)}>
-                <ChevronUp className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                             onClick={toLastQuarter}/>
-                <div className="calendar-header-content-quarter"
-                     onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
-                    <div>{plugin.viewController.parseQuarterName(selectedDate.quarter)}</div>
-                </div>
-                <ChevronDown className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}}
-                            onClick={toNextQuarter}/>
-            </div>
-        </div>
     }
 
     return <div className="calendar-header-block-quarter">
@@ -244,21 +200,7 @@ export default function CalendarViewHeader() {
     const isSingleRow = plugin.database.setting.calendarHeaderLayout === CalendarHeaderLayout.SINGLE_ROW;
 
     if (isSingleRow) {
-        return <div className="d-header-font calendar-header-container calendar-header-single-row">
-            <div className="calendar-header-row calendar-header-row-single calendar-header-row-nowrap">
-                <div className="calendar-header-left">
-                    <MonthItem vertical={true}/>
-                    <YearItem vertical={true}/>
-                </div>
-                <div className="calendar-header-center">
-                    <QuarterItem vertical={true}/>
-                </div>
-                <div className="calendar-header-right">
-                    <TodayItem/>
-                    <ViewSelector/>
-                </div>
-            </div>
-        </div>
+        return <SingleRowCalendarHeader/>
     }
 
     return <div className="d-header-font calendar-header-container">
@@ -274,4 +216,93 @@ export default function CalendarViewHeader() {
             </div>
         </div>
     </div>
+}
+
+function SingleRowCalendarHeader() {
+
+    const [hidden, setHidden] = useState(true);
+    const dispatch = useAppDispatch();
+    const selectedItem = useAppSelector(selectSelectedItem);
+    const selectedDate = selectedItem.date;
+    const calendarViewType = useAppSelector(selectCalendarViewType);
+    const plugin = useContext(PluginContext)!;
+
+    const toLastYear = () => {
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.minus({years: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
+    };
+
+    const toNextYear = () => {
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.plus({years: 1});
+        dispatch(updateSelectedItem(newSelectedItem));
+    };
+
+    const toggleCalendarViewType = () => {
+        if (calendarViewType === CalendarViewType.MONTH) {
+            dispatch(updateCalendarViewType(CalendarViewType.YEAR));
+            const newSelectedItem = new SelectedItem();
+            newSelectedItem.type = SelectedItemType.MONTH_ITEM
+            newSelectedItem.date = selectedItem.date;
+            dispatch(updateSelectedItem(newSelectedItem));
+        } else {
+            dispatch(updateCalendarViewType(CalendarViewType.MONTH));
+            const newSelectedItem = new SelectedItem();
+            newSelectedItem.type = SelectedItemType.DAY_ITEM
+            newSelectedItem.date = selectedItem.date;
+            dispatch(updateSelectedItem(newSelectedItem));
+        }
+    };
+
+    const toLastQuarter = () => {
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.minus({months: 3});
+        dispatch(updateSelectedItem(newSelectedItem));
+    };
+
+    const toNextQuarter = () => {
+        const newSelectedItem = new SelectedItem();
+        newSelectedItem.type = selectedItem.type;
+        newSelectedItem.date = selectedDate.plus({months: 3});
+        dispatch(updateSelectedItem(newSelectedItem));
+    };
+
+    return <div className="d-header-font calendar-header-container calendar-header-single-row">
+        <div className="calendar-header-row calendar-header-row-single">
+            <div className="calendar-header-nav-group"
+                 onMouseEnter={() => setHidden(false)}
+                 onMouseLeave={() => setHidden(true)}>
+                <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastYear}/>
+                <div className="calendar-header-nav-text">
+                    <span className="calendar-header-content-year"
+                          onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year), NoteType.YEARLY)}>
+                        {selectedDate.year}年
+                    </span>
+                    <span className="calendar-header-content-month"
+                          onClick={toggleCalendarViewType}
+                          onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.month), NoteType.MONTHLY)}>
+                        {selectedDate.month}月
+                    </span>
+                </div>
+                <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextYear}/>
+            </div>
+            <div className="calendar-header-nav-group"
+                 onMouseEnter={() => setHidden(false)}
+                 onMouseLeave={() => setHidden(true)}>
+                <ChevronLeft className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toLastQuarter}/>
+                <span className="calendar-header-content-quarter"
+                      onDoubleClick={() => plugin.noteController.openNoteByNoteType(DateTime.local(selectedDate.year, selectedDate.quarter * 3 - 2), NoteType.QUARTERLY)}>
+                    {plugin.viewController.parseQuarterName(selectedDate.quarter)}
+                </span>
+                <ChevronRight className="d-icon" style={{visibility: hidden ? 'hidden' : 'visible'}} onClick={toNextQuarter}/>
+            </div>
+            <div className="calendar-header-nav-group calendar-header-nav-group-buttons" style={{marginRight: '8px'}}>
+                <TodayItem/>
+            </div>
+        </div>
+    </div>;
 }
