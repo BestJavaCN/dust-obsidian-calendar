@@ -32,7 +32,13 @@ function MonthItem({showYear, showMonth}: { showYear: number, showMonth: number 
         dispatch(updateCalendarViewType(CalendarViewType.MONTH));
         const dayItem = new SelectedItem();
         dayItem.type = SelectedItemType.DAY_ITEM;
-        dayItem.date = DateTime.local(showYear, showMonth);
+        // 日期设为当月的当前日，若当月无此日（如2月30日）则取当月最后一天
+        const todayDay = DateTime.now().day;
+        let targetDate = DateTime.local(showYear, showMonth, todayDay);
+        if (!targetDate.isValid) {
+            targetDate = DateTime.local(showYear, showMonth).endOf('month');
+        }
+        dayItem.date = targetDate;
         dispatch(updateSelectedItem(dayItem));
     };
 
